@@ -17,18 +17,15 @@ DATADIR = '.'
 
 
 Point = namedtuple('Point', ['x1', 'x2'])
+Line = namedtuple('Line', ['slope', 'intercept', 'point1', 'point2'])
 
 
 class Data(object):
     def __init__(self, dim=2, num_points=100):
-        self.__p1 = Point(np.random.uniform(INF, SUP),
-                          np.random.uniform(INF, SUP))
-        self.__p2 = Point(np.random.uniform(INF, SUP),
-                          np.random.uniform(INF, SUP))
         self.__dim = dim
         self.__num_points = num_points
-        self.__line = self._gram_schmidt()
         self.__X = self._initialize_points()
+        self.__line = self._generate_line()
 
     @property
     def p1(self):
@@ -37,6 +34,16 @@ class Data(object):
     @property
     def p2(self):
         return self.__p2
+
+    def _generate_line(self):
+        """Creates a line based on p1 and p2."""
+        p1 = Point(np.random.uniform(INF, SUP),
+                   np.random.uniform(INF, SUP))
+        p2 = Point(np.random.uniform(INF, SUP),
+                   np.random.uniform(INF, SUP))
+        slope = (p2.x2 - p1.x2) / (p2.x1 - p1.x1)
+        intercept = p1.x2 - slope * p1.x1
+        return Line(intercept, slope, p1, p2)
 
     @property
     def X(self):
@@ -70,18 +77,16 @@ class Data(object):
         plt.plot(self.p1, self.p2)
         plt.show()
 
-    def _vector(self):
-        """Creates a vector based on p1 and p2."""
-        p1 = np.array(self.__p1)
-        p2 = np.array(self.__p2)
-        return p1 - p2
+    @property
+    def line(self):
+        pass
 
-    def _gram_schmidt(self):
-        """Finds a solution using the Gram-Schmidt process."""
-        u = np.random.uniform(-1, 1, (3, 1))
-        x = np.array([1, *self._vector()]).reshape(3, -1)
-        w = u - np.dot(x.T, u) / np.dot(x.T, x) * x
-        return w
+    # def _gram_schmidt(self):
+        # """Finds a solution using the Gram-Schmidt process."""
+        # u = np.random.uniform(-1, 1, (3, 1))
+        # x = np.array([1, *self._line()]).reshape(3, -1)
+        # w = u - np.dot(x.T, u) / np.dot(x.T, x) * x
+        # return w
 
     def _initialize_points(self):
         """Random points"""
