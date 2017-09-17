@@ -1,7 +1,9 @@
 """Perceptron Learning Algorithm"""
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+plt.style.use('ggplot')
+
 from collections import namedtuple
 
 
@@ -48,12 +50,14 @@ class Data(object):
     @property
     def positive_points(self):
         """All points on the positive side of the line."""
-        return self.X[:, (self.line.T.dot(self.X) > 0).reshape(-1)]
+        is_positive = (self.line.T.dot(self.X) > 0).reshape(-1)
+        return self.X[:,is_positive]
 
     @property
     def negative_points(self):
         """All points on the negative side of the line."""
-        return self.X[:, (self.line.T.dot(self.X) < 0).reshape(-1)]
+        is_negative = (self.line.T.dot(self.X) < 0).reshape(-1)
+        return self.X[:, is_negative]
 
     def plot(self):
         """Plots all the points and the line."""
