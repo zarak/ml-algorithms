@@ -1,6 +1,7 @@
 """Perceptron Learning Algorithm"""
 
 import numpy as np
+import matplotlib.pyplot as plt
 from collections import namedtuple
 
 
@@ -24,6 +25,8 @@ class Data(object):
                           np.random.uniform(INF, SUP))
         self.__dim = dim
         self.__num_points = num_points
+        self.__line = self._gram_schmidt()
+        self.__X = self._initialize_points()
 
     @property
     def p1(self):
@@ -35,6 +38,9 @@ class Data(object):
 
     @property
     def X(self):
+        return self.__X
+
+    def _initialize_points(self):
         """Random points"""
         dim = self.__dim
         num_points = self.__num_points
@@ -44,7 +50,15 @@ class Data(object):
     @property
     def line(self):
         """Random line"""
-        return self._gram_schmidt()
+        return self.__line
+
+    @property
+    def positive_points(self):
+        return self.X[:, (self.line.T.dot(self.X) > 0).reshape(-1)]
+
+    @property
+    def negative_points(self):
+        return self.X[:, (self.line.T.dot(self.X) < 0).reshape(-1)]
 
     def _line(self):
         """Creates a line based on p1 and p2."""
@@ -59,9 +73,12 @@ class Data(object):
         w = u - np.dot(x.T, u) / np.dot(x.T, x) * x
         return w
 
-    def positive_points(self):
-        return self.line.T.dot(self.X) > 0
-
-
     def plot(self):
-        pass
+        positive_x = self.positive_points[1, :]
+        positive_y = self.positive_points[2, :]
+        negative_x = self.negative_points[1, :]
+        negative_y = self.negative_points[2, :]
+        plt.scatter(positive_x, positive_y, marker='o')
+        plt.scatter(negative_x, negative_y, marker='x')
+        plt.plot(self.p1, self.p2)
+        plt.show()
