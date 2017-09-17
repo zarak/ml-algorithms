@@ -24,23 +24,28 @@ class Data(object):
                           np.random.uniform(INF, SUP))
 
     @property
+    def X(self):
+        """Random points"""
+        pass
+
+    @property
     def line(self):
+        """Random line"""
+        return self._gram_schmidt()
+
+    def _line(self):
         """Creates a line based on p1 and p2."""
         p1 = np.array(self.__p1)
         p2 = np.array(self.__p2)
         return p1 - p2
 
-    @property
-    def X(self):
-        """Random points"""
-        pass
-
     def _gram_schmidt(self):
         """Finds a solution using the Gram-Schmidt process."""
-        line = np.array([1, *self.line()])
+        x = np.array([1, *self._line()]).reshape(3, -1)
+        u = np.random.uniform(-1, 1, (3, 1))
+        w = u - np.dot(x.T, u) / np.dot(x.T, x) * x
+        return w
 
-        u = np.
-        
 
     def plot(self):
         pass
