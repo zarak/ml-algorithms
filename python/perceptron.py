@@ -8,8 +8,8 @@ __description__ = 'Perceptron Learning Algorithm'
 __author__ = 'Zarak (@z0k)'
 
 
-SUPREMUM = 1
-INFIMUM = -1
+SUP = 1
+INF = -1
 DATADIR = '.'
 
 
@@ -18,18 +18,20 @@ Point = namedtuple('Point', ['x1', 'x2'])
 
 class Data(object):
     def __init__(self):
-        self.__p1 = Point(np.random.rand(), np.random.rand())
-        self.__p2 = Point(np.random.rand(), np.random.rand())
+        self.__p1 = Point(np.random.uniform(INF, SUP),
+                          np.random.uniform(INF, SUP))
+        self.__p2 = Point(np.random.uniform(INF, SUP),
+                          np.random.uniform(INF, SUP))
 
     @property
     def line(self):
         """Creates a line based on p1 and p2."""
-        p1 = self.__p1
-        p2 = self.__p2
+        p1 = np.array(self.__p1)
+        p2 = np.array(self.__p2)
         return p1 - p2
 
     @property
-    def data(self):
+    def X(self):
         """Random points"""
         pass
 
@@ -40,3 +42,5 @@ class Data(object):
         u = np.
         
 
+    def plot(self):
+        pass
