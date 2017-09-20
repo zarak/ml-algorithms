@@ -17,11 +17,15 @@ DATADIR = '.'
 
 
 Point = namedtuple('Point', ['x1', 'x2'])
-Line = namedtuple('Line', ['slope', 'intercept', 'point1', 'point2'])
+Line = namedtuple('Line', ['w0', 'w1', 'w2'])
 
 
 class Data(object):
     def __init__(self, dim=2, num_points=100):
+        self.__p1 = Point(np.random.uniform(INF, SUP),
+                          np.random.uniform(INF, SUP))
+        self.__p2 = Point(np.random.uniform(INF, SUP),
+                          np.random.uniform(INF, SUP))
         self.__dim = dim
         self.__num_points = num_points
         self.__X = self._initialize_points()
@@ -37,13 +41,11 @@ class Data(object):
 
     def _generate_line(self):
         """Creates a line based on p1 and p2."""
-        p1 = Point(np.random.uniform(INF, SUP),
-                   np.random.uniform(INF, SUP))
-        p2 = Point(np.random.uniform(INF, SUP),
-                   np.random.uniform(INF, SUP))
+        p1 = self.p1
+        p2 = self.p2
         slope = (p2.x2 - p1.x2) / (p2.x1 - p1.x1)
         intercept = p1.x2 - slope * p1.x1
-        return Line(intercept, slope, p1, p2)
+        return Line(-intercept, -slope, 1)
 
     @property
     def X(self):
@@ -52,7 +54,7 @@ class Data(object):
     @property
     def line(self):
         """Randomly generated line represented as (w0, w1, w2)."""
-        return self.__line
+        return np.array(self.__line).reshape(3, -1)
 
     @property
     def positive_points(self):
@@ -74,12 +76,10 @@ class Data(object):
         negative_y = self.negative_points[2, :]
         plt.scatter(positive_x, positive_y, marker='o')
         plt.scatter(negative_x, negative_y, marker='x')
-        plt.plot(self.p1, self.p2)
+        xs = [p[0] for p in [self.p1, self.p2]]
+        ys = [p[1] for p in [self.p1, self.p2]]
+        plt.plot(xs, ys)
         plt.show()
-
-    @property
-    def line(self):
-        pass
 
     # def _gram_schmidt(self):
         # """Finds a solution using the Gram-Schmidt process."""
