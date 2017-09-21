@@ -1,10 +1,10 @@
 """Perceptron Learning Algorithm"""
 
 import numpy as np
-import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib.artist import setp
 from collections import namedtuple
-plt.style.use('ggplot')
+plt.style.use('dark_background')
 
 
 __description__ = 'Perceptron Learning Algorithm'
@@ -18,6 +18,26 @@ DATADIR = '.'
 
 Point = namedtuple('Point', ['x1', 'x2'])
 Line = namedtuple('Line', ['w0', 'w1', 'w2'])
+
+
+def plot_target(line, ax):
+    """Given a line object, plot a line across the entire figure."""
+    intercept, slope, _ = -1 * line
+    x1 = -1
+    x2 = 1
+    y1 = slope * x1 + intercept
+    y2 = slope * x2 + intercept
+    ax.plot((x1, x2), (y1, y2), color='green', label='f')
+
+
+def plot_hypothesis(line, ax):
+    """Given a line object, plot a line across the entire figure."""
+    intercept, slope, _ = -1 * line
+    x1 = -1
+    x2 = 1
+    y1 = slope * x1 + intercept
+    y2 = slope * x2 + intercept
+    ax.plot((x1, x2), (y1, y2), color='orange', label='h')
 
 
 class Data(object):
@@ -76,13 +96,22 @@ class Data(object):
         negative_y = self.negative_points[2, :]
         plt.scatter(positive_x, positive_y, marker='o')
         plt.scatter(negative_x, negative_y, marker='x')
+
+        # Plot the two random points to generate the line
         xs = [p[0] for p in [self.p1, self.p2]]
         ys = [p[1] for p in [self.p1, self.p2]]
         plt.scatter(xs, ys, color='green', marker='D')
-        plt.plot(xs, ys, color='green')
+
+        ax = plt.gca()
+        plot_target(self.line, ax)
+
         plt.xlim(-1, 1)
         plt.ylim(-1, 1)
+        plt.legend(fancybox=True)
+        plt.xlabel('$x_1$', fontsize=12)
+        plt.ylabel('$x_2$', fontsize=12)
         plt.show()
+
 
     # def _gram_schmidt(self):
         # """Finds a solution using the Gram-Schmidt process."""
