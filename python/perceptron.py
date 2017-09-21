@@ -1,10 +1,10 @@
 """Perceptron Learning Algorithm"""
 
-import matplotlib.pyplot as plt
 import numpy as np
-plt.style.use('ggplot')
-
+import seaborn as sns
+import matplotlib.pyplot as plt
 from collections import namedtuple
+plt.style.use('ggplot')
 
 
 __description__ = 'Perceptron Learning Algorithm'
@@ -78,7 +78,10 @@ class Data(object):
         plt.scatter(negative_x, negative_y, marker='x')
         xs = [p[0] for p in [self.p1, self.p2]]
         ys = [p[1] for p in [self.p1, self.p2]]
-        plt.plot(xs, ys)
+        plt.scatter(xs, ys, color='green', marker='D')
+        plt.plot(xs, ys, color='green')
+        plt.xlim(-1, 1)
+        plt.ylim(-1, 1)
         plt.show()
 
     # def _gram_schmidt(self):
