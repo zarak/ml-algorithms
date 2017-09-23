@@ -1,4 +1,4 @@
-"""Perceptron Learning Algorithm"""
+"""Synthetic Data"""
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -7,7 +7,7 @@ from collections import namedtuple
 plt.style.use('dark_background')
 
 
-__description__ = 'Perceptron Learning Algorithm'
+__description__ = 'Randomly generated data'
 __author__ = 'Zarak (@z0k)'
 
 
