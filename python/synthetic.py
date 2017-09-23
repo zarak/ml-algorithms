@@ -52,17 +52,17 @@ class Data(object):
         self.__line = self._generate_line()
 
     @property
-    def p1(self):
+    def _p1(self):
         return self.__p1
 
     @property
-    def p2(self):
+    def _p2(self):
         return self.__p2
 
     def _generate_line(self):
         """Creates a line based on p1 and p2."""
-        p1 = self.p1
-        p2 = self.p2
+        p1 = self._p1
+        p2 = self._p2
         slope = (p2.x2 - p1.x2) / (p2.x1 - p1.x1)
         intercept = p1.x2 - slope * p1.x1
         return Line(-intercept, -slope, 1)
@@ -98,8 +98,8 @@ class Data(object):
         plt.scatter(negative_x, negative_y, marker='x')
 
         # Plot the two random points to generate the line
-        xs = [p[0] for p in [self.p1, self.p2]]
-        ys = [p[1] for p in [self.p1, self.p2]]
+        xs = [p[0] for p in [self._p1, self.p2]]
+        ys = [p[1] for p in [self._p1, self.p2]]
         plt.scatter(xs, ys, color='green', marker='D')
 
         ax = plt.gca()
