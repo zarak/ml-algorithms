@@ -46,10 +46,10 @@ class Data(object):
                           np.random.uniform(INF, SUP))
         self.__p2 = Point(np.random.uniform(INF, SUP),
                           np.random.uniform(INF, SUP))
-        self.__dim = dim
-        self.__num_points = num_points
-        self.__X = self._initialize_points()
-        self.__line = self._generate_line()
+        self._dim = dim
+        self._num_points = num_points
+        self._X = self._initialize_points()
+        self._line = self._generate_line()
 
     @property
     def _p1(self):
@@ -58,14 +58,6 @@ class Data(object):
     @property
     def _p2(self):
         return self.__p2
-
-    def _generate_line(self):
-        """Creates a line based on p1 and p2."""
-        p1 = self._p1
-        p2 = self._p2
-        slope = (p2.x2 - p1.x2) / (p2.x1 - p1.x1)
-        intercept = p1.x2 - slope * p1.x1
-        return Line(-intercept, -slope, 1)
 
     @property
     def X(self):
@@ -112,17 +104,23 @@ class Data(object):
         plt.ylabel('$x_2$', fontsize=12)
         plt.show()
 
-
-    # def _gram_schmidt(self):
-        # """Finds a solution using the Gram-Schmidt process."""
-        # u = np.random.uniform(-1, 1, (3, 1))
-        # x = np.array([1, *self._line()]).reshape(3, -1)
-        # w = u - np.dot(x.T, u) / np.dot(x.T, x) * x
-        # return w
-
     def _initialize_points(self):
         """Random points"""
         dim = self.__dim
         num_points = self.__num_points
         X_without_dummies = np.random.uniform(INF, SUP, (dim, num_points))
         return np.vstack([np.ones((1, num_points)), X_without_dummies])
+
+    def _generate_line(self):
+        """Creates a line based on p1 and p2."""
+        p1 = self._p1
+        p2 = self._p2
+        slope = (p2.x2 - p1.x2) / (p2.x1 - p1.x1)
+        intercept = p1.x2 - slope * p1.x1
+        return Line(-intercept, -slope, 1)
+
+    def __repr__(self):
+        pass
+
+    def __iter__(self):
+        pass
