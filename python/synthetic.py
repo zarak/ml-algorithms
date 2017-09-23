@@ -21,7 +21,7 @@ Line = namedtuple('Line', ['w0', 'w1', 'w2'])
 
 
 def plot_target(line, ax):
-    """Given a line object, plot a line across the entire figure."""
+    """Draw a line representing the target function."""
     intercept, slope, _ = -1 * line
     x1 = -1
     x2 = 1
@@ -31,7 +31,7 @@ def plot_target(line, ax):
 
 
 def plot_hypothesis(line, ax):
-    """Given a line object, plot a line across the entire figure."""
+    """Draw a line representing the hypothesis function."""
     intercept, slope, _ = -1 * line
     x1 = -1
     x2 = 1
