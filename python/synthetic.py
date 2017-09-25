@@ -112,7 +112,6 @@ class Data(object):
 
         plt.xlim(-1, 1)
         plt.ylim(-1, 1)
-        plt.legend(fancybox=True)
         plt.xlabel('$x_1$', fontsize=12)
         plt.ylabel('$x_2$', fontsize=12)
         # plt.show()
@@ -138,3 +137,7 @@ class Data(object):
 
     def __iter__(self):
         pass
+
+
+if __name__ == "__main__":
+    pass
