@@ -61,12 +61,12 @@ class Data(object):
 
     @property
     def X(self):
-        return self.__X
+        return self._X
 
     @property
     def line(self):
         """Randomly generated line represented as (w0, w1, w2)."""
-        return np.array(self.__line).reshape(3, -1)
+        return np.array(self._line).reshape(3, -1)
 
     @property
     def positive_points(self):
@@ -106,8 +106,8 @@ class Data(object):
 
     def _initialize_points(self):
         """Random points"""
-        dim = self.__dim
-        num_points = self.__num_points
+        dim = self._dim
+        num_points = self._num_points
         X_without_dummies = np.random.uniform(INF, SUP, (dim, num_points))
         return np.vstack([np.ones((1, num_points)), X_without_dummies])
 
