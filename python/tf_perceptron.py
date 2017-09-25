@@ -26,8 +26,8 @@ def activation(z):
 
 def update_weights(w, random_point):
     random_point = tf.reshape(random_point, (4, 1))
-    w = w + random_point[:3] * random_point[3]
-    return w
+    training_op = tf.assign(w, w + random_point[:3] * random_point[3])
+    return training_op
 
 
 def fit():
@@ -49,16 +49,26 @@ if __name__ == "__main__":
     # misclassified points
     mis = tf.reshape(tf.boolean_mask(data, tf.tile(mask, [4, 1])), (4, -1))
     num_misclassified = tf.cast(tf.size(mis) / 4, dtype=tf.int32)
-    random_index = tf.random_uniform((), dtype=tf.int32, minval=0, maxval=num_misclassified)
+    # random_index = tf.random_uniform((), dtype=tf.int32, minval=0,
+            # maxval=num_misclassified)
 
-    random_point = tf.transpose(mis)[random_index]
-    w = update_weights(w, random_point)
+    # random_point = tf.transpose(mis)[random_index]
+    random_point = tf.random_shuffle(tf.transpose(mis))[0]
+    # w = update_weights(w, random_point)
+
+    random_point = tf.reshape(random_point, (4, 1))
+    training_op = tf.assign(w, w + random_point[:3] * random_point[3])
 
     init = tf.global_variables_initializer()
     with tf.Session() as sess:
         sess.run(init)
 
-        weights, misclassified = sess.run([w, num_misclassified], feed_dict={X_train: X, y_train: y})
-        while misclassified != 0:
+        misclassified = sess.run(num_misclassified, feed_dict={X_train: X, y_train: y})
+        while misclassified >  0:
+            weights, misclassified = sess.run(
+                    [training_op, num_misclassified], feed_dict={X_train: X, y_train: y})
             print(misclassified)
-            sess.run([w, num_misclassified], feed_dict={X_train: X, y_train: y})
+            print(weights)
+            misclassified = sess.run(num_misclassified, feed_dict={X_train: X, y_train: y})
+            if misclassified == 0:
+                break
