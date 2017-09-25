@@ -64,11 +64,16 @@ if __name__ == "__main__":
         sess.run(init)
 
         misclassified = sess.run(num_misclassified, feed_dict={X_train: X, y_train: y})
+        iterations = 0
         while misclassified >  0:
             weights, misclassified = sess.run(
                     [training_op, num_misclassified], feed_dict={X_train: X, y_train: y})
             print(misclassified)
             print(weights)
+            print(iterations)
+            iterations += 1
             misclassified = sess.run(num_misclassified, feed_dict={X_train: X, y_train: y})
             if misclassified == 0:
                 break
+
+        print("Final weights:", weights)
