@@ -28,6 +28,7 @@ def plot_target(line, ax):
     y1 = slope * x1 + intercept
     y2 = slope * x2 + intercept
     ax.plot((x1, x2), (y1, y2), color='green', label='f')
+    return ax
 
 
 def plot_hypothesis(line, ax):
@@ -38,6 +39,7 @@ def plot_hypothesis(line, ax):
     y1 = slope * x1 + intercept
     y2 = slope * x2 + intercept
     ax.plot((x1, x2), (y1, y2), color='orange', label='h')
+    return ax
 
 
 class Data(object):
@@ -89,7 +91,7 @@ class Data(object):
         Returns:
             Array of shape (num_points, 1)
         """
-        return activation(self.line.T.dot(self.X)).T
+        return activation(self.line.T.dot(self.X))
 
     def plot(self):
         """Plots all the points and the line."""
@@ -101,8 +103,8 @@ class Data(object):
         plt.scatter(negative_x, negative_y, marker='x')
 
         # Plot the two random points to generate the line
-        xs = [p[0] for p in [self._p1, self.p2]]
-        ys = [p[1] for p in [self._p1, self.p2]]
+        xs = [p[0] for p in [self._p1, self._p2]]
+        ys = [p[1] for p in [self._p1, self._p2]]
         plt.scatter(xs, ys, color='green', marker='D')
 
         ax = plt.gca()
@@ -113,7 +115,8 @@ class Data(object):
         plt.legend(fancybox=True)
         plt.xlabel('$x_1$', fontsize=12)
         plt.ylabel('$x_2$', fontsize=12)
-        plt.show()
+        # plt.show()
+        return ax
 
     def _initialize_points(self):
         """Random points"""

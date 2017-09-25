@@ -16,19 +16,31 @@ class Perceptron(object):
     def iterations(self):
         return self._iterations
 
-    def fit(self, data):
+    def fit(self, train, labels):
         """Train on the synthetic training data
 
         Args:
-            data (Data): Synthetic Data object
         """
-        # logits
-        z = self.w.T.dot(data.X)
+        X = train
+        y = labels
+        z = self.w.T.dot(X)
         h = self._activation(z)
-        idx = (h <= 0).reshape(-1)
-        misclassified_points = d.X[:, idx]
-        if not misclassified_points:
+        data = np.vstack((X, y))
+        idx = (h != y).reshape(-1)
+        while idx.any():
+            misclassified_points = data[:, idx] 
+            print(misclassified_points.shape)
             random_point = random.choice(misclassified_points.T)
+            
+            self._w = self._w + (random_point[:-1]
+                    * random_point[-1]).reshape(3, 1)
+            self._iterations += 1
+
+            z = self.w.T.dot(X)
+            print(self.w)
+            h = self._activation(z)
+            idx = (h != y).reshape(-1)
+            print(idx)
 
     def _activation(self, z):
         return np.sign(z)
