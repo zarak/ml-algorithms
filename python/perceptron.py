@@ -10,16 +10,26 @@ class Perceptron(object):
 
     @property
     def w(self):
+        """The weight vector (initialized with all zeros)"""
         return self._w
 
     @property
     def iterations(self):
+        """A count of the number of iterations until convergence of the PLA."""
         return self._iterations
+
+    @property
+    def g(self):
+        """Final out of sample estimate g."""
+        return self.w / self.w[-1]
 
     def fit(self, train, labels):
         """Train on the synthetic training data
 
         Args:
+            train (array): Data to train on, array with shape (dims, num_samples)
+            labels (array): Labels for the training data with shape (1,
+            num_samples)
         """
         X = train
         y = labels
@@ -43,4 +53,6 @@ class Perceptron(object):
             print(idx)
 
     def _activation(self, z):
+        """The activation function returns the sign of the input. An input of
+        0 returns 0"""
         return np.sign(z)
