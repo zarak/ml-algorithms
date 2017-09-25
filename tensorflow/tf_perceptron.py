@@ -3,7 +3,7 @@ import tensorflow as tf
 import synthetic
 
 SHAPE = (3, 1)
-
+LOGDIR = "tf-logs/"
 
 def create_placeholders():
     X = tf.placeholder(dtype=tf.float32, shape=(3, None), name="X")
@@ -13,6 +13,7 @@ def create_placeholders():
 
 def initialize_weights():
     w = tf.Variable(tf.zeros(SHAPE), dtype=tf.float32, name="w")
+    tf.summary.histogram("weights", w)
     return w
 
 
@@ -30,9 +31,6 @@ def update_weights(w, random_point):
     return training_op
 
 
-def fit():
-    pass
-
 if __name__ == "__main__":
     d = synthetic.Data()
     X = d.X
@@ -49,6 +47,7 @@ if __name__ == "__main__":
     # misclassified points
     mis = tf.reshape(tf.boolean_mask(data, tf.tile(mask, [4, 1])), (4, -1))
     num_misclassified = tf.cast(tf.size(mis) / 4, dtype=tf.int32)
+    tf.summary.scalar("misclassified", num_misclassified)
     # random_index = tf.random_uniform((), dtype=tf.int32, minval=0,
             # maxval=num_misclassified)
 
@@ -59,15 +58,19 @@ if __name__ == "__main__":
     random_point = tf.reshape(random_point, (4, 1))
     training_op = tf.assign(w, w + random_point[:3] * random_point[3])
 
+    summ = tf.summary.merge_all()
     init = tf.global_variables_initializer()
+    writer = tf.summary.FileWriter(LOGDIR + hparam)
+
     with tf.Session() as sess:
         sess.run(init)
 
         misclassified = sess.run(num_misclassified, feed_dict={X_train: X, y_train: y})
         iterations = 0
         while misclassified >  0:
-            weights, misclassified = sess.run(
-                    [training_op, num_misclassified], feed_dict={X_train: X, y_train: y})
+            weights, s = sess.run(
+                    [training_op, summ], feed_dict={X_train: X, y_train: y})
+            writer.add_summary(s)
             print(misclassified)
             print(weights)
             print(iterations)
