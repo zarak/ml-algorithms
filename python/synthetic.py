@@ -80,6 +80,17 @@ class Data(object):
         is_negative = (self.line.T.dot(self.X) < 0).reshape(-1)
         return self.X[:, is_negative]
 
+    def labels(self, activation):
+        """Gets the labels of the synthetic data set.
+
+        Args:
+            activation (function): 
+
+        Returns:
+            Array of shape (num_points, 1)
+        """
+        return activation(self.line.T.dot(self.X)).T
+
     def plot(self):
         """Plots all the points and the line."""
         positive_x = self.positive_points[1, :]
