@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     summ = tf.summary.merge_all()
     init = tf.global_variables_initializer()
-    writer = tf.summary.FileWriter(LOGDIR + hparam)
+    writer = tf.summary.FileWriter(LOGDIR)
 
     with tf.Session() as sess:
         sess.run(init)

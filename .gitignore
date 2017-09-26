@@ -1,0 +1,4 @@
+__pycache__*
+.cache*
+tensorflow/synthetic.py
+tensorflow/tf-logs/
