@@ -31,11 +31,7 @@ def update_weights(w, random_point):
     return training_op
 
 
-if __name__ == "__main__":
-    d = synthetic.Data()
-    X = d.X
-    y = d.labels(np.sign)
-
+def build_graph():
     X_train, y_train = create_placeholders() 
     w = initialize_weights()
 
@@ -59,9 +55,17 @@ if __name__ == "__main__":
     training_op = tf.assign(w, w + random_point[:3] * random_point[3])
 
     summ = tf.summary.merge_all()
-    init = tf.global_variables_initializer()
     writer = tf.summary.FileWriter(LOGDIR)
+    return num_misclassified
 
+
+if __name__ == "__main__":
+    d = synthetic.Data()
+    X = d.X
+    y = d.labels(np.sign)
+
+    num_misclassified = build_graph()
+    init = tf.global_variables_initializer()
     with tf.Session() as sess:
         sess.run(init)
 
