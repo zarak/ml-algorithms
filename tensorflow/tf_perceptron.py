@@ -25,12 +25,6 @@ def activation(z):
     return tf.sign(z)
 
 
-def update_weights(w, random_point):
-    random_point = tf.reshape(random_point, (4, 1))
-    training_op = tf.assign(w, w + random_point[:3] * random_point[3])
-    return training_op
-
-
 def build_graph():
     X_train, y_train = create_placeholders() 
     w = initialize_weights()
@@ -49,14 +43,11 @@ def build_graph():
 
     # random_point = tf.transpose(mis)[random_index]
     random_point = tf.random_shuffle(tf.transpose(mis))[0]
-    # w = update_weights(w, random_point)
 
     random_point = tf.reshape(random_point, (4, 1))
     training_op = tf.assign(w, w + random_point[:3] * random_point[3])
 
-    summ = tf.summary.merge_all()
-    writer = tf.summary.FileWriter(LOGDIR)
-    return num_misclassified
+    return X_train, y_train, training_op, num_misclassified
 
 
 if __name__ == "__main__":
@@ -64,8 +55,10 @@ if __name__ == "__main__":
     X = d.X
     y = d.labels(np.sign)
 
-    num_misclassified = build_graph()
+    X_train, y_train, training_op, num_misclassified = build_graph()
     init = tf.global_variables_initializer()
+    summ = tf.summary.merge_all()
+    writer = tf.summary.FileWriter(LOGDIR)
     with tf.Session() as sess:
         sess.run(init)
 
@@ -76,11 +69,10 @@ if __name__ == "__main__":
                     [training_op, summ], feed_dict={X_train: X, y_train: y})
             writer.add_summary(s)
             print(misclassified)
-            print(weights)
-            print(iterations)
             iterations += 1
             misclassified = sess.run(num_misclassified, feed_dict={X_train: X, y_train: y})
             if misclassified == 0:
                 break
 
-        print("Final weights:", weights)
+        print("Final weights:\n", weights)
+        print("Number of iterations:", iterations)
