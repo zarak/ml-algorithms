@@ -50,9 +50,33 @@ class Perceptron(object):
 
     def predict(self, test):
         """Make predictions on test data."""
-        return self.w.T.dot(test)
+        return self._activation(self.w.T.dot(test))
 
     def _activation(self, z):
         """The activation function returns the sign of the input. An input of
         0 returns 0"""
         return np.sign(z)
+
+
+def main(points):
+    num_iterations = []
+    probability_not_equal = []
+    for i in range(1000):
+        d = synthetic.Data(num_points=points)
+        p = Perceptron()
+        p.fit(d.X, d.labels(np.sign))
+        X_test = synthetic.Data(num_points=10000).X
+        y_test = np.sign(d.line.T.dot(X_test))
+        preds = p.predict(X_test)
+        num_iterations.append(p.iterations)
+        probability_not_equal.append(np.mean(preds != y_test))
+    avg_iterations = np.mean(num_iterations)
+    avg_probability_not_equal = np.mean(probability_not_equal)
+    print(f"Average number of iterations over 1000 runs for N={points}: {avg_iterations}")
+    print(f"Average probability that g != f: over 1000 runs for N={points}: {avg_probability_not_equal}") 
+
+
+if __name__ == "__main__":
+    import synthetic
+    main(10)
+    main(100)
