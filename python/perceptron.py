@@ -59,24 +59,23 @@ class Perceptron(object):
         return np.sign(z)
 
 
-def main(points):
+def main(train_points, test_points):
     num_iterations = []
     probability_not_equal = []
     for i in range(1000):
-        d = synthetic.Data(num_points=points)
+        d = synthetic.Data(num_train_points=train_points,
+                num_test_points=test_points)
         p = Perceptron()
-        p.fit(d.X, d.labels(np.sign))
-        X_test = synthetic.Data(num_points=10000).X
-        y_test = np.sign(d.line.T.dot(X_test))
-        preds = p.predict(X_test)
+        p.fit(d.X_train, d.y_train)
+        preds = p.predict(d.X_test)
         num_iterations.append(p.iterations)
-        probability_not_equal.append(np.mean(preds != y_test))
+        probability_not_equal.append(np.mean(preds != d.y_test))
     avg_iterations = np.mean(num_iterations)
     avg_probability_not_equal = np.mean(probability_not_equal)
-    print(f"Average number of iterations over 1000 runs for N={points}: {avg_iterations}")
-    print(f"Average probability that g != f: over 1000 runs for N={points}: {avg_probability_not_equal}") 
+    print(f"Average number of iterations over 1000 runs for N={train_points}: {avg_iterations}")
+    print(f"Average probability that g != f: over 1000 runs for N={train_points}: {avg_probability_not_equal}") 
 
 
 if __name__ == "__main__":
-    main(10)
-    main(100)
+    main(10, 10000)
+    main(100, 10000)

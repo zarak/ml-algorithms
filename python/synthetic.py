@@ -77,7 +77,7 @@ class Data(object):
         return self._y_train
 
     @property
-    def y_train(self):
+    def y_test(self):
         """Use np.sign as the default activation function for the test labels"""
         return self._y_test
 
