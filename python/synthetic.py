@@ -43,7 +43,7 @@ def plot_hypothesis(line, ax):
 
 
 class Data(object):
-    def __init__(self, dim=2, num_points=100):
+    def __init__(self, num_points=100, dim=2):
         self.__p1 = Point(np.random.uniform(INF, SUP),
                           np.random.uniform(INF, SUP))
         self.__p2 = Point(np.random.uniform(INF, SUP),
