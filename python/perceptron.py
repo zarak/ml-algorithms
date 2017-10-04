@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import synthetic
 
 SHAPE = (3, 1)
 
@@ -77,6 +78,5 @@ def main(points):
 
 
 if __name__ == "__main__":
-    import synthetic
     main(10)
     main(100)
