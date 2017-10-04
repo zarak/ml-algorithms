@@ -51,8 +51,8 @@ class Data(object):
         self._dim = dim
         self._num_points = num_points
         self._X = self._initialize_points()
-        self._y = self.labels(np.sign)
         self._line = self._generate_line()
+        self._y = self.labels(np.sign)
 
     @property
     def _p1(self):
