@@ -51,6 +51,7 @@ class Data(object):
         self._dim = dim
         self._num_points = num_points
         self._X = self._initialize_points()
+        self._y = self.labels(np.sign)
         self._line = self._generate_line()
 
     @property
@@ -64,6 +65,11 @@ class Data(object):
     @property
     def X(self):
         return self._X
+
+    @property
+    def y(self):
+        """Use np.sign as the default activation function for the labels"""
+        return self._y
 
     @property
     def line(self):
@@ -86,7 +92,7 @@ class Data(object):
         """Gets the labels of the synthetic data set.
 
         Args:
-            activation (function): 
+            activation (function): Use a custom activation function
 
         Returns:
             Array of shape (num_points, 1)
