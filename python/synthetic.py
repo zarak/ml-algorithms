@@ -43,16 +43,17 @@ def plot_hypothesis(line, ax):
 
 
 class Data(object):
-    def __init__(self, num_points=100, dim=2):
+    def __init__(self, num_train_points=100, num_test_points=1000, dim=2):
         self.__p1 = Point(np.random.uniform(INF, SUP),
                           np.random.uniform(INF, SUP))
         self.__p2 = Point(np.random.uniform(INF, SUP),
                           np.random.uniform(INF, SUP))
         self._dim = dim
-        self._num_points = num_points
-        self._X = self._initialize_points()
+        self._X_train = self._initialize_points(num_train_points)
+        self._X_test = self._initialize_points(num_test_points)
         self._line = self._generate_line()
-        self._y = self.labels(np.sign)
+        self._y_train = self.labels(self.X_train, np.sign)
+        self._y_test = self.labels(self.X_test, np.sign)
 
     @property
     def _p1(self):
@@ -63,13 +64,22 @@ class Data(object):
         return self.__p2
 
     @property
-    def X(self):
-        return self._X
+    def X_train(self):
+        return self._X_train
 
     @property
-    def y(self):
-        """Use np.sign as the default activation function for the labels"""
-        return self._y
+    def X_test(self):
+        return self._X_test
+
+    @property
+    def y_train(self):
+        """Use np.sign as the default activation function for the train labels"""
+        return self._y_train
+
+    @property
+    def y_train(self):
+        """Use np.sign as the default activation function for the test labels"""
+        return self._y_test
 
     @property
     def line(self):
@@ -79,16 +89,16 @@ class Data(object):
     @property
     def positive_points(self):
         """All points on the positive side of the line."""
-        is_positive = (self.line.T.dot(self.X) > 0).reshape(-1)
-        return self.X[:,is_positive]
+        is_positive = (self.line.T.dot(self.X_train) > 0).reshape(-1)
+        return self.X_train[:,is_positive]
 
     @property
     def negative_points(self):
         """All points on the negative side of the line."""
-        is_negative = (self.line.T.dot(self.X) < 0).reshape(-1)
-        return self.X[:, is_negative]
+        is_negative = (self.line.T.dot(self.X_train) < 0).reshape(-1)
+        return self.X_train[:, is_negative]
 
-    def labels(self, activation):
+    def labels(self, data, activation):
         """Gets the labels of the synthetic data set.
 
         Args:
@@ -97,7 +107,7 @@ class Data(object):
         Returns:
             Array of shape (num_points, 1)
         """
-        return activation(self.line.T.dot(self.X))
+        return activation(self.line.T.dot(data))
 
     def plot(self):
         """Plots all the points and the line."""
@@ -123,10 +133,9 @@ class Data(object):
         # plt.show()
         return ax
 
-    def _initialize_points(self):
+    def _initialize_points(self, num_points):
         """Random points"""
         dim = self._dim
-        num_points = self._num_points
         X_without_dummies = np.random.uniform(INF, SUP, (dim, num_points))
         return np.vstack([np.ones((1, num_points)), X_without_dummies])
 
