@@ -24,47 +24,39 @@ class LinearRegression(object):
         return self._activation(self._w.dot(test))
 
 
-# TODO: Need to improve API for Data class. Use a method which splits data into
-# training and test sets.
-def out_of_sample_error(model, training_data, test_data):
-    # X_train = test_data.X
-    # y_train = training_data.labels(np.sign)
-    
-    # model.fit(X_train, y_train)
-    
-    # X_test = synthetic.Data(num_points=1000).X
-    # y_test = np.sign(training_data.line.T.dot(X_test))
+def out_of_sample_error(model, data):
+    X_test = data.X_test
+    y_test = data.y_test
 
-    # predictions = model.predict(X_test)
-
-    # mismatch_probability = np.mean(predictions != y_test)
-    # return mismatch_probability
-    pass
+    predictions = model.predict(X_test)
+    mismatch_probability = np.mean(predictions != y_test)
+    return mismatch_probability
 
 
-def in_sample_error(model, training_data):
-    X_train = training_data.X
-    y_train = training_data.labels(np.sign)
+def in_sample_error(model, data):
+    X_train = data.X_train
+    y_train = data.y_train
     
     model.fit(X_train, y_train)
 
     predictions = model.predict(X_train)
 
     mismatch_probability = np.mean(predictions != y_train)
-    return mismatch_probability, model
+    return mismatch_probability, model, data
 
 
 if __name__ == '__main__':
-    num_points = 100
+    num_train_points = 100
+    num_test_points = 1000
     in_sample_scores = []
-    final_models = []
+    out_of_sample_scores = []
     for _ in range(1000):
         model = LinearRegression()
-        training_data = synthetic.Data(num_points=num_points)
+        data = synthetic.Data(num_train_points, num_test_points)
     
-        prob, g = in_sample_error(model, training_data)
+        prob, g, data = in_sample_error(model, data)
         in_sample_scores.append(prob)
-        final_models.append(g)
+        out_of_sample_scores.append(out_of_sample_error(g, data))
 
-    # Have to specify axis for np.mean
-    print("In sample error: ", np.mean(in_sample_scores, axis=0))
+    print("In sample error: ", np.mean(in_sample_scores))
+    print("Out of sample error: ", np.mean(out_of_sample_scores))
