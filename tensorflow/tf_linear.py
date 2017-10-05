@@ -11,22 +11,36 @@ def initialize_placeholders():
     return X_train, y_train, X_test, y_test
 
 
-X_train, y_train, X_test, y_test = initialize_placeholders()
+def fit(X_train, y_train):
+    XT = tf.transpose(X_train)
+    theta = tf.matmul(tf.matmul(tf.matrix_inverse(tf.matmul(XT, X_train)), XT),
+            y_train)
+    return theta
 
-XT = tf.transpose(X_train)
-theta = tf.matmul(tf.matmul(tf.matrix_inverse(tf.matmul(XT, X_train)), XT),
-        y_train)
 
-preds = tf.sign(tf.matmul(X_test, theta))
-prob = tf.not_equal(preds, y_test)
+def predict(X_test, theta):
+    return tf.sign(tf.matmul(X_test, theta))
 
-probs = []
-with tf.Session() as sess:
-    for _ in range(1000):
-        d = synthetic.Data(num_train_points=100, num_test_points=1000)
-        prob_val = sess.run(prob, feed_dict={X_train: d.X_train.T,
-            y_train: d.y_train.T,
-            X_test: d.X_test.T,
-            y_test: d.y_test.T})
-        probs.append(prob_val)
-    print(np.mean(probs))
+
+def question5():
+    X_train, y_train, X_test, y_test = initialize_placeholders()
+    
+    theta = fit(X_train, y_train)
+
+    preds = predict(X_test, theta)
+    prob = tf.not_equal(preds, y_test)
+
+    probs = []
+    with tf.Session() as sess:
+        for _ in range(1000):
+            d = synthetic.Data(num_train_points=100, num_test_points=1000)
+            prob_val = sess.run(prob, feed_dict={X_train: d.X_train.T,
+                y_train: d.y_train.T,
+                X_test: d.X_test.T,
+                y_test: d.y_test.T})
+            probs.append(prob_val)
+        print(np.mean(probs))
+
+
+if __name__ == "__main__":
+    question5()
