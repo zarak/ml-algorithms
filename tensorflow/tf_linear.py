@@ -3,11 +3,15 @@ import synthetic
 import tensorflow as tf
 
 
+def initialize_placeholders():
+    X_train = tf.placeholder(shape=(None, 3), dtype=tf.float32, name="X_train")
+    y_train = tf.placeholder(shape=(None, 1), dtype=tf.float32, name="y_train")
+    X_test = tf.placeholder(shape=(None, 3), dtype=tf.float32, name="X_test")
+    y_test = tf.placeholder(shape=(None, 1), dtype=tf.float32, name="y_test")
+    return X_train, y_train, X_test, y_test
 
-X_train = tf.placeholder(shape=(None, 3), dtype=tf.float32, name="X_train")
-y_train = tf.placeholder(shape=(None, 1), dtype=tf.float32, name="y_train")
-X_test = tf.placeholder(shape=(None, 3), dtype=tf.float32, name="X_test")
-y_test = tf.placeholder(shape=(None, 1), dtype=tf.float32, name="y_test")
+
+X_train, y_train, X_test, y_test = initialize_placeholders()
 
 XT = tf.transpose(X_train)
 theta = tf.matmul(tf.matmul(tf.matrix_inverse(tf.matmul(XT, X_train)), XT),
