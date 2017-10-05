@@ -4,6 +4,7 @@ import tensorflow as tf
 
 
 def initialize_placeholders():
+    """Initializes placeholders for data."""
     X_train = tf.placeholder(shape=(None, 3), dtype=tf.float32, name="X_train")
     y_train = tf.placeholder(shape=(None, 1), dtype=tf.float32, name="y_train")
     X_test = tf.placeholder(shape=(None, 3), dtype=tf.float32, name="X_test")
@@ -12,6 +13,8 @@ def initialize_placeholders():
 
 
 def fit(X_train, y_train):
+    """Uses the analytic solution to linear regression to find parameter
+    theta."""
     XT = tf.transpose(X_train)
     theta = tf.matmul(tf.matmul(tf.matrix_inverse(tf.matmul(XT, X_train)), XT),
             y_train)
@@ -19,10 +22,13 @@ def fit(X_train, y_train):
 
 
 def predict(X_test, theta):
+    """Use theta to generate a hypothesis for the target function."""
     return tf.sign(tf.matmul(X_test, theta))
 
 
-def question5():
+def question6():
+    """Estimate the out of sample error Eout by training on 100 points and then
+    using the learned model to classify 1000 fresh points."""
     X_train, y_train, X_test, y_test = initialize_placeholders()
     
     theta = fit(X_train, y_train)
@@ -43,6 +49,7 @@ def question5():
 
 
 def question8():
+    """The target function here is f(x_1, x_2) = sign(x_1**2 + x_2**2 - 0.6)"""
     X_train, y_train, X_test, y_test = initialize_placeholders()
     
     theta = fit(X_train, y_train)
