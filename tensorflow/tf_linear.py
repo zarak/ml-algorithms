@@ -45,7 +45,7 @@ def question6():
                 X_test: d.X_test.T,
                 y_test: d.y_test.T})
             probs.append(prob_val)
-        print(np.mean(probs))
+    return np.mean(probs)
 
 
 def question8():
@@ -65,7 +65,7 @@ def question8():
                 y_train: nd.y_train.T,
             })
             probs.append(prob_val)
-        print("In sample error with noisy data: ", np.mean(probs))
+    return np.mean(probs)
 
 
 def question10():
@@ -88,9 +88,11 @@ def question10():
                 y_test: nd.y_test.T
             })
             probs.append(prob_val)
-        print("Out of sample error with noisy data using transformed features: ", np.mean(probs))
-
+        
+    return np.mean(probs)
 
 if __name__ == "__main__":
-    question8()
-    question10()
+    print(question6())
+    print("In sample error with noisy data: ", question8())
+    print("Out of sample error with noisy data using transformed features: ",
+            question10())
