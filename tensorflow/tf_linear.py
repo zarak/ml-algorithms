@@ -3,11 +3,11 @@ import synthetic
 import tensorflow as tf
 
 
-def initialize_placeholders():
+def initialize_placeholders(num_features=3):
     """Initializes placeholders for data."""
-    X_train = tf.placeholder(shape=(None, 3), dtype=tf.float32, name="X_train")
+    X_train = tf.placeholder(shape=(None, num_features), dtype=tf.float32, name="X_train")
     y_train = tf.placeholder(shape=(None, 1), dtype=tf.float32, name="y_train")
-    X_test = tf.placeholder(shape=(None, 3), dtype=tf.float32, name="X_test")
+    X_test = tf.placeholder(shape=(None, num_features), dtype=tf.float32, name="X_test")
     y_test = tf.placeholder(shape=(None, 1), dtype=tf.float32, name="y_test")
     return X_train, y_train, X_test, y_test
 
@@ -68,5 +68,29 @@ def question8():
         print("In sample error with noisy data: ", np.mean(probs))
 
 
+def question10():
+    """The target function here is f(x_1, x_2) = sign(x_1**2 + x_2**2 - 0.6)"""
+    X_train, y_train, X_test, y_test = initialize_placeholders(num_features=6)
+    
+    theta = fit(X_train, y_train)
+
+    preds = predict(X_test, theta)
+    prob = tf.not_equal(preds, y_test)
+
+    probs = []
+    with tf.Session() as sess:
+        for _ in range(1000):
+            nd = synthetic.NoisyData()
+            Z_train, Z_test = nd.add_features()
+            prob_val = sess.run(prob, feed_dict= {X_train: Z_train.T,
+                y_train: nd.y_train.T,
+                X_test: Z_test.T,
+                y_test: nd.y_test.T
+            })
+            probs.append(prob_val)
+        print("Out of sample error with noisy data using transformed features: ", np.mean(probs))
+
+
 if __name__ == "__main__":
     question8()
+    question10()
