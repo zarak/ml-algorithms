@@ -159,16 +159,28 @@ class NoisyData(Data):
     def __init__(self, num_train_points=1000, num_test_points=1000):
         super().__init__(num_train_points, num_test_points)
         self._y_train = self._generate_targets(self.X_train)
-        self._add_noise()
         self._y_test = self._generate_targets(self.X_test)
+        self._add_noise()
 
     def _generate_targets(self, X):
         return np.sign(X[1]**2 + X[2]**2 - 0.6)
 
     def _add_noise(self):
-        # Randomly flip the sign on 10% subset of training date
+        """Randomly flips the sign on 10% subset of training date by mutating
+        the target vectors.""" 
         self._y_train = self._y_train * np.random.choice([1, -1],
                 self._y_train.shape, p=[0.9, 0.1])
+        self._y_test = self._y_test * np.random.choice([1, -1],
+                self._y_test.shape, p=[0.9, 0.1])
+
+    def add_features(self):
+        """Creates three additional nonlinear features and returns as
+        a tuple of training and test sets."""
+        new_X_train = np.vstack([self.X_train, self.X_train[1] * self.X_train[2],
+            self.X_train[1]**2, self.X_train[2]**2])
+        new_X_test = np.vstack([self.X_test, self.X_test[1] * self.X_test[2],
+            self.X_test[1]**2, self.X_test[2]**2])
+        return new_X_train, new_X_test
 
 
 if __name__ == "__main__":
