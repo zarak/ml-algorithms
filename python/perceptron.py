@@ -5,8 +5,8 @@ import synthetic
 SHAPE = (3, 1)
 
 class Perceptron(object):
-    def __init__(self):
-        self._w = np.zeros(SHAPE)
+    def __init__(self, weights=np.zeros(SHAPE)):
+        self._w = weights
         self._iterations = 0
 
     @property
