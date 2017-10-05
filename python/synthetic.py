@@ -147,11 +147,28 @@ class Data(object):
         intercept = p1.x2 - slope * p1.x1
         return Line(-intercept, -slope, 1)
 
-    def __repr__(self):
-        pass
+    # TODO
+    # def __repr__(self):
+        # pass
 
-    def __iter__(self):
-        pass
+    # def __iter__(self):
+        # pass
+
+
+class NoisyData(Data):
+    def __init__(self, num_train_points=1000, num_test_points=1000):
+        super().__init__(num_train_points, num_test_points)
+        self._y_train = self._generate_targets(self.X_train)
+        self._add_noise()
+        self._y_test = self._generate_targets(self.X_test)
+
+    def _generate_targets(self, X):
+        return np.sign(X[1]**2 + X[2]**2 - 0.6)
+
+    def _add_noise(self):
+        # Randomly flip the sign on 10% subset of training date
+        self._y_train = self._y_train * np.random.choice([1, -1],
+                self._y_train.shape, p=[0.9, 0.1])
 
 
 if __name__ == "__main__":
