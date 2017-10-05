@@ -163,7 +163,7 @@ class NoisyData(Data):
         self._add_noise()
 
     def _generate_targets(self, X):
-        return np.sign(X[1]**2 + X[2]**2 - 0.6)
+        return np.sign(X[1]**2 + X[2]**2 - 0.6).reshape(1, -1)
 
     def _add_noise(self):
         """Randomly flips the sign on 10% subset of training date by mutating
