@@ -42,5 +42,24 @@ def question5():
         print(np.mean(probs))
 
 
+def question8():
+    X_train, y_train, X_test, y_test = initialize_placeholders()
+    
+    theta = fit(X_train, y_train)
+
+    preds = predict(X_train, theta)
+    prob = tf.not_equal(preds, y_train)
+
+    probs = []
+    with tf.Session() as sess:
+        for _ in range(1000):
+            nd = synthetic.NoisyData()
+            prob_val = sess.run(prob, feed_dict={X_train: nd.X_train.T,
+                y_train: nd.y_train.T,
+            })
+            probs.append(prob_val)
+        print("In sample error with noisy data: ", np.mean(probs))
+
+
 if __name__ == "__main__":
-    question5()
+    question8()
