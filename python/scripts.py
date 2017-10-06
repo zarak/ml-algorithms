@@ -26,6 +26,24 @@ def question9():
     print(np.mean(model_weights, axis=0))
 
 
+# Week 2
+def question1():
+    v1s = []
+    vrands = []
+    vmins = []
+    for _ in range(10000):
+        flips = np.random.randint(0, 2, (1000, 10))
+        c1 = flips[0, :]
+        crand = flips[np.random.randint(0, len(flips)), :]
+        cmin = flips[np.argmin(np.sum(flips, axis=1)), :]
+        v1s.append(np.mean(c1))
+        vrands.append(np.mean(crand))
+        vmins.append(np.mean(cmin))
+    averages = np.mean((v1s, vrands, vmins), axis=1)
+    print("v1: {}, vrand: {}, vmin: {}".format(*averages))
+
+
 if __name__ == "__main__":
-    question7()
-    question9()
+    # question7()
+    # question9()
+    question1()
