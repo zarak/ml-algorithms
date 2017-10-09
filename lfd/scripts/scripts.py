@@ -1,3 +1,4 @@
+from collections import Counter
 from models import linear
 from models import perceptron
 import synthetic
@@ -47,11 +48,13 @@ def question1():
     averages = np.mean((v1s, vrands, vmins), axis=1)
     print("v1: {}, vrand: {}, vmin: {}".format(*averages))
     return v1s, vrands, vmins
-    # return averages
 
 
-def norm(u, v):
-    return np.abs(u - v)
+def hoeffding_LHS(dist):
+    counter = Counter(dist)
+    freqs = [counter[epsilon] / 100000 for epsilon in np.array(range(11)) / 10]
+    probs = [1 - freqs[5] if i == 0 else 1 - np.sum(freqs[5-i:5+i]) for i in range(6)]
+    return probs
 
 
 def hoeffding_RHS(epsilon, N):
@@ -63,9 +66,9 @@ def question2():
     u = 0.5
     epsilon = np.arange(0, 0.6, 0.1)
     plt.plot(epsilon, hoeffding_RHS(epsilon, 10), label='RHS of Hoeffding')
-    plt.plot(epsilon, np.repeat(norm(v1, u), 6), label='v1')
-    plt.plot(epsilon, np.repeat(norm(vrand, u), 6), label='vrand')
-    plt.plot(epsilon, np.repeat(norm(vmin, u), 6), label='vmin')
+    plt.plot(epsilon, hoeffding_LHS(v1), label='v1')
+    plt.plot(epsilon, hoeffding_LHS(vrand), label='vrand')
+    plt.plot(epsilon, hoeffding_LHS(vmin), label='vmin')
     plt.legend()
     plt.show()
 
