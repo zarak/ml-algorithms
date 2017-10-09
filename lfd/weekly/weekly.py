@@ -6,8 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# Week 1
-class Week1:
+class Week2:
     def question7(self):
         iterations = []    
         for _ in range(1000):
@@ -29,9 +28,6 @@ class Week1:
             model_weights.append(lm.w)
         print(np.mean(model_weights, axis=0))
 
-
-# Week 2
-class Week2:
     def question1(self):
         """Returns distributions of the fraction of heads obtained in ten coin
         flips among 1000 fair coins. Experiment is repeated 100000 times."""
