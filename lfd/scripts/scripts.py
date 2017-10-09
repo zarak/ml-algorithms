@@ -1,5 +1,5 @@
-import linear
-import perceptron
+from models import linear
+from models import perceptron
 import synthetic
 import numpy as np
 import matplotlib.pyplot as plt
