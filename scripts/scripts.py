@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+# Week 1
 def question7():
     iterations = []    
     for _ in range(1000):
@@ -45,8 +46,8 @@ def question1():
         vmins.append(np.mean(cmin))
     averages = np.mean((v1s, vrands, vmins), axis=1)
     print("v1: {}, vrand: {}, vmin: {}".format(*averages))
-    # return v1s, vrands, vmins
-    return averages
+    return v1s, vrands, vmins
+    # return averages
 
 
 def norm(u, v):
