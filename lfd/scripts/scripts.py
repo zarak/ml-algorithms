@@ -66,9 +66,11 @@ def question2():
     u = 0.5
     epsilon = np.arange(0, 0.6, 0.1)
     plt.plot(epsilon, hoeffding_RHS(epsilon, 10), label='RHS of Hoeffding')
-    plt.plot(epsilon, hoeffding_LHS(v1), label='v1')
-    plt.plot(epsilon, hoeffding_LHS(vrand), label='vrand')
-    plt.plot(epsilon, hoeffding_LHS(vmin), label='vmin')
+    plt.plot(epsilon, hoeffding_LHS(v1), label='v1', linestyle='--',
+            marker='s', color='green')
+    plt.plot(epsilon, hoeffding_LHS(vrand), label='vrand', linestyle='--',
+            marker='x', color='blue', alpha=0.5)
+    plt.plot(epsilon, hoeffding_LHS(vmin), label='vmin', linestyle='--', marker='o')
     plt.legend()
     plt.show()
 
