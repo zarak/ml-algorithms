@@ -1,1 +1,1 @@
-from scripts.scripts import *
+from weekly.weekly import *

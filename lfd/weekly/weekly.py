@@ -52,8 +52,8 @@ class Week2:
         probs = [1 - freqs[5] if i == 0 else 1 - np.sum(freqs[5-i:5+i]) for i in range(6)]
         return probs
 
-    def hoeffding_RHS(epsilon, N):
-        return 2 * np.exp(-2 * epsilon**2 * N)
+    def hoeffding_RHS(epsilon, N, M=1):
+        return 2 * M * np.exp(-2 * epsilon**2 * N)
 
     def question2(self):
         v1, vrand, vmin = question1()
