@@ -1,1 +1,0 @@
-from weekly.weekly import *

@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def question7(self):
+def question7():
     iterations = []    
     for _ in range(1000):
          lm = linear.LinearRegression()
@@ -17,7 +17,7 @@ def question7(self):
          iterations.append(p.iterations)
     print(np.mean(iterations))
 
-def question9(self):
+def question9():
     model_weights = []
     for _ in range(100):
         nd = synthetic.NoisyData()
@@ -27,7 +27,7 @@ def question9(self):
         model_weights.append(lm.w)
     print(np.mean(model_weights, axis=0))
 
-def question1(self):
+def question1():
     """Returns distributions of the fraction of heads obtained in ten coin
     flips among 1000 fair coins. Experiment is repeated 100000 times."""
     v1s = [] # Fraction of heads of first coin flipped
@@ -54,7 +54,7 @@ def hoeffding_LHS(dist):
 def hoeffding_RHS(epsilon, N, M=1):
     return 2 * M * np.exp(-2 * epsilon**2 * N)
 
-def question2(self):
+def question2():
     v1, vrand, vmin = question1()
     u = 0.5
     epsilon = np.arange(0, 0.6, 0.1)
