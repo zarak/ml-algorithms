@@ -11,8 +11,8 @@ __description__ = 'Randomly generated data'
 __author__ = 'Zarak (@z0k)'
 
 
-SUP = 1
-INF = -1
+MAX = 1
+MIN = -1
 DATADIR = '.'
 
 
@@ -44,10 +44,10 @@ def plot_hypothesis(line, ax):
 
 class Data(object):
     def __init__(self, num_train_points=100, num_test_points=1000, dim=2):
-        self.__p1 = Point(np.random.uniform(INF, SUP),
-                          np.random.uniform(INF, SUP))
-        self.__p2 = Point(np.random.uniform(INF, SUP),
-                          np.random.uniform(INF, SUP))
+        self.__p1 = Point(np.random.uniform(MIN, MAX),
+                          np.random.uniform(MIN, MAX))
+        self.__p2 = Point(np.random.uniform(MIN, MAX),
+                          np.random.uniform(MIN, MAX))
         self._dim = dim
         self._X_train = self._initialize_points(num_train_points)
         self._X_test = self._initialize_points(num_test_points)
@@ -136,7 +136,7 @@ class Data(object):
     def _initialize_points(self, num_points):
         """Random points"""
         dim = self._dim
-        X_without_dummies = np.random.uniform(INF, SUP, (dim, num_points))
+        X_without_dummies = np.random.uniform(MIN, MAX, (dim, num_points))
         return np.vstack([np.ones((1, num_points)), X_without_dummies])
 
     def _generate_line(self):
