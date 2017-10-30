@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class GradientDescent():
+class GradientDescent:
     """
     Gradient descent optimizer on the error function
     E(u, v) = (u * exp(v) - 2 * v * exp(-u))**2
@@ -39,4 +39,18 @@ class GradientDescent():
             dE = self.gradient()
             v = -dE
             self._w += self.lr * v
+        return self.w
+
+
+# FIXME: Requires rewrite to avoid conflating with parent class methods
+class CoordinateDescent(GradientDescent):
+    def __init__(self, w, learning_rate=0.1):
+        super().__init__(w, learning_rate)
+
+    def optimize(self):
+        for i in range(10):
+            du = self.du()
+            self._w[0, 0] += self.lr * du
+            dv = self.dv()
+            self._w[1, 0] += self.lr * dv
         return self.w
