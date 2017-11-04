@@ -52,28 +52,32 @@ class LogisticRegression(object):
         return (-(label * random_point) / (1 + np.exp(label * random_point.dot(self.w)))).reshape(3, 1)
 
     def cross_entropy(self, X, y):
-        return np.sum(np.log(1 + np.exp(-(y * self.w.T.dot(X))))) / y.shape[1]
+        return np.log(1 + np.exp(-(y * self.w.T.dot(X))))
 
-def out_of_sample_error(model, data):
+
+def out_of_sample_error(model, data, i):
     X_train = data.X_train
     y_train = data.y_train
     X_test = data.X_test
     y_test = data.y_test
     model.fit(X_train, y_train)
     predictions = model.predict(X_test)
-    cross_entropy_error = model.cross_entropy(X_test, predictions)
+    cross_entropy_error = model.cross_entropy(X_test[:, i], predictions[:, i])
     epochs = model.epochs
     return cross_entropy_error, epochs
 
-if __name__ == '__main__':
+
+def run():
     np.set_printoptions(suppress=True, precision=5)
-    num_train_points = 100
-    num_test_points = 10000
+    num_train_points = num_test_points = 100
     out_of_sample_scores = []
-    for _ in range(100):
+    for i in range(num_test_points):
         model = LogisticRegression()
         data = synthetic.Data(num_train_points, num_test_points)
-        error, epochs = out_of_sample_error(model, data)
+        error, epochs = out_of_sample_error(model, data, i)
         out_of_sample_scores.append((error, epochs))
     print("Out of sample error and average steps: ",
             np.mean(out_of_sample_scores, axis=0))
+
+if __name__ == '__main__':
+    run()
