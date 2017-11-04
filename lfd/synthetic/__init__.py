@@ -1,1 +1,1 @@
-from synthetic.synthetic import Data, NoisyData
+from lfd.synthetic.synthetic import Data, NoisyData

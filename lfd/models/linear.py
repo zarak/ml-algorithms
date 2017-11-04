@@ -1,4 +1,4 @@
-import synthetic
+from lfd import synthetic
 import numpy as np
 
 
