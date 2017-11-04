@@ -79,5 +79,8 @@ if __name__ == '__main__':
         data = synthetic.Data(num_train_points, num_test_points)
         error, epochs = out_of_sample_error(model, data)
         out_of_sample_scores.append((error, epochs))
-    print("Out of sample error and average steps: ",
-            np.mean(out_of_sample_scores, axis=0))
+    averages = np.mean(out_of_sample_scores, axis=0)
+    E_out = averages[0]
+    average_epochs = averages[1]
+    print("Out of sample error: ", E_out)
+    print("Average number of epochs: ", average_epochs)
