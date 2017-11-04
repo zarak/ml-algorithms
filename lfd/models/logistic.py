@@ -25,9 +25,10 @@ class LogisticRegression(object):
         assert train.shape[0] == 3
         X = train
         y = labels
+        num_points = y.shape[1]
         initial_weights = np.copy(self.w)
         while True:
-            random_idx = np.random.permutation(range(100))
+            random_idx = np.random.permutation(range(num_points))
             for idx in random_idx:
                 random_point = X[:, idx]
                 label = y[:, idx]
@@ -43,7 +44,7 @@ class LogisticRegression(object):
         return np.linalg.norm(self.w - initial_weights) < 0.01
 
     def predict(self, X):
-        return self.w.T.dot(X)
+        return sigmoid(self.w.T.dot(X))
 
     def sigmoid(self, logits):
         return 1 / (1 + np.exp(-logits))
@@ -52,7 +53,7 @@ class LogisticRegression(object):
         return (-(label * random_point) / (1 + np.exp(label * random_point.dot(self.w)))).reshape(3, 1)
 
     def cross_entropy(self, x, y):
-        return np.log(1 + np.exp(-(y * self.w.T.dot(x))))
+        return np.sum(np.log(1 + np.exp(-(y * self.w.T.dot(x))))) / y.shape[1]
 
 
 def out_of_sample_error(model, data):
@@ -62,9 +63,7 @@ def out_of_sample_error(model, data):
     y_test = data.y_test
     num_test_points = y_test.shape[1]
     model.fit(X_train, y_train)
-    predictions = model.predict(X_test)
-    for i in range(num_test_points):
-        cross_entropy_error = model.cross_entropy(X_test[:, i], predictions[:, i])
+    cross_entropy_error = model.cross_entropy(X_test, y_test)
     epochs = model.epochs
     return cross_entropy_error, epochs
 
