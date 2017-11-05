@@ -3,6 +3,9 @@ import numpy as np
 
 
 class LinearRegression(object):
+    def __init__(self, l2=0):
+        self.l2 = l2
+
     @property
     def w(self):
         return self._w
@@ -13,7 +16,8 @@ class LinearRegression(object):
     def fit(self, train, labels):
         X = train
         y = labels
-        self._w = y.dot(X.T).dot(np.linalg.inv(X.dot(X.T)))
+        self._w = y.dot(X.T).dot(np.linalg.inv(X.dot(X.T) + self.l2
+            * np.identity(X.shape[0])))
 
     def predict(self, test):
         return self._activation(self._w.dot(test))
