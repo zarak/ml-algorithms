@@ -3,6 +3,12 @@ import pandas as pd
 import numpy as np
 
 
+def load_data():
+    data_in = np.loadtxt('../data/week6/in.dta')
+    data_out = np.loadtxt('../data/week6/out.dta')
+    return data_in, data_out
+
+
 def non_linear_transformation(X):
     # num_examples = X.shape[0]
     feature_1 = np.expand_dims(X[:, 1]**2, axis=1)
@@ -27,6 +33,8 @@ def question2(reg):
     data_out = np.fromfile('../data/week6/out.dta', sep=' ').reshape(-1, 3)
     num_in = data_in.shape[0]
     num_out = data_out.shape[0]
+    # Add bias to the first two columns only - the third column is the target
+    # variable
     X_train = np.hstack((np.ones((num_in, 1)), data_in[:, :2]))
     # print(X_train.shape)
     y_train = data_in[:, 2].reshape(1, -1)
