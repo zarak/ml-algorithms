@@ -10,6 +10,7 @@ def load_data():
 
 
 def non_linear_transformation(X):
+    """The first column of X must be ones"""
     # num_examples = X.shape[0]
     feature_1 = np.expand_dims(X[:, 1]**2, axis=1)
     feature_2 = np.expand_dims(X[:, 2]**2, axis=1)
