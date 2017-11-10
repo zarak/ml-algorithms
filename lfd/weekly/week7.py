@@ -9,30 +9,34 @@ NUM_TRAIN = 25
 NUM_VAL = 10
 
 
-def train_test_split(X, y, train_size):
-    X_train = X[:train_size]
-    y_train = y[:train_size]
-    X_test = X[train_size:]
-    y_test = y[train_size:]
+def train_test_split(X, y, reverse):
+    if reverse:
+        X_train = X[-10:]
+        y_train = y[-10:]
+        X_test = X[:-10]
+        y_test = y[:-10]
+    else:
+        X_train = X[:25]
+        y_train = y[:25]
+        X_test = X[25:]
+        y_test = y[25:]
     return X_train, X_test, y_train, y_test
 
 
-def question2(num_train):
+def question2(reverse=False):
     data_in, data_out = week6.load_data()
 
     X = data_in[:, :TARGET_VARIABLE_COLUMN]
     y = data_in[:, TARGET_VARIABLE_COLUMN]
-
-    num_val = X.shape[0] - num_train
 
     X_test = data_out[:, :TARGET_VARIABLE_COLUMN]
     y_test = data_out[:, TARGET_VARIABLE_COLUMN]
     # Add the bias component of the data
     X_test = np.hstack((np.ones((X_test.shape[0], 1)), X_test))
 
-    X_train, X_val, y_train, y_val = train_test_split(X, y, num_train)
-    X_train = np.hstack((np.ones((num_train, 1)), X_train))
-    X_val = np.hstack((np.ones((num_val, 1)), X_val))
+    X_train, X_val, y_train, y_val = train_test_split(X, y, reverse=reverse)
+    X_train = np.hstack((np.ones((10, 1)), X_train))
+    X_val = np.hstack((np.ones((25, 1)), X_val))
 
     Z_train = week6.non_linear_transformation(X_train)
     Z_val = week6.non_linear_transformation(X_val)
@@ -71,4 +75,4 @@ def question2(num_train):
 
 
 if __name__ == "__main__":
-    print(question2(10))
+    print(question2(True))
