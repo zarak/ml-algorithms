@@ -17,39 +17,58 @@ def train_test_split(X, y, train_size):
     return X_train, X_test, y_train, y_test
 
 
-def question1():
+def question2(num_train):
     data_in, data_out = week6.load_data()
 
     X = data_in[:, :TARGET_VARIABLE_COLUMN]
     y = data_in[:, TARGET_VARIABLE_COLUMN]
 
-    X_train, X_val, y_train, y_val = train_test_split(X, y, NUM_TRAIN)
-    X_train = np.hstack((np.ones((NUM_TRAIN, 1)), X_train))
-    X_val = np.hstack((np.ones((NUM_VAL, 1)), X_val))
+    num_val = X.shape[0] - num_train
+
+    X_test = data_out[:, :TARGET_VARIABLE_COLUMN]
+    y_test = data_out[:, TARGET_VARIABLE_COLUMN]
+    # Add the bias component of the data
+    X_test = np.hstack((np.ones((X_test.shape[0], 1)), X_test))
+
+    X_train, X_val, y_train, y_val = train_test_split(X, y, num_train)
+    X_train = np.hstack((np.ones((num_train, 1)), X_train))
+    X_val = np.hstack((np.ones((num_val, 1)), X_val))
 
     Z_train = week6.non_linear_transformation(X_train)
     Z_val = week6.non_linear_transformation(X_val)
+    Z_test = week6.non_linear_transformation(X_test)
 
     # Reshape y to 2-dimensional array
     y_train = y_train.reshape(1, -1)
     y_val = y_val.reshape(1, -1)
+    y_test = y_test.reshape(1, -1)
 
-    error_scores = {}
+    validation_error_scores = {}
+    test_error_scores = {}
     for k in range(3, 8):
         Z_train_subset = np.copy(Z_train[:, :k + 1])
         Z_val_subset = np.copy(Z_val[:, :k + 1])
+        Z_test_subset = np.copy(Z_test[:, :k + 1])
 
         # Take the transpose to put in format expected by LinearRegression
         lm = LinearRegression(l2=0)
         lm.fit(Z_train_subset.T, y_train)
 
         val_preds = lm.predict(Z_val_subset.T)
-        error = week6.error_rate(y_val, val_preds)
-        error_scores[k] = error
+        val_error = week6.error_rate(y_val, val_preds)
+        validation_error_scores[k] = val_error
+
+        test_preds = lm.predict(Z_test_subset.T)
+        test_error = week6.error_rate(y_test, test_preds)
+        test_error_scores[k] = test_error
+
+        error_scores = validation_error_scores, test_error_scores
 
     print(error_scores)
-    return min(error_scores, key=error_scores.get)
+    min_val_error = min(validation_error_scores, key=validation_error_scores.get)
+    min_test_error = min(test_error_scores, key=test_error_scores.get)
+    return min_val_error, min_test_error
 
 
 if __name__ == "__main__":
-    print(question1())
+    print(question2(10))
