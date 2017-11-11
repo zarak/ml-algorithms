@@ -74,5 +74,12 @@ def question2(reverse=False):
     return min_val_error, min_test_error
 
 
+def question6():
+    e1 = np.random.uniform(0, 1, 100000)
+    e2 = np.random.uniform(0, 1, 100000)
+    e = np.min([e1, e2], axis=0)
+    return np.mean([e1, e2, e], axis=1)
+
+
 if __name__ == "__main__":
-    print(question2(True))
+    print(question6())
