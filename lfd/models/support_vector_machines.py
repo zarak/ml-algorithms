@@ -33,6 +33,10 @@ class SVM:
     def w(self):
         return self._w
 
+    @property
+    def alphas(self):
+        return self._alphas
+
     def fit(self, X, y):
         # Ensure that there is not just one label for all points
         self._set_dimensions(X)
@@ -47,9 +51,11 @@ class SVM:
         print(p.shape)
         print(c.shape)
         # Minimize     1/2 u^T Q u - p^T u
-        # Subject to   C.T Au >= c
-        result = solve_qp(Q, p, A, c)[0]
-        self._w = result
+        # Subject to   A u >= c
+        # result = solve_qp(Q, p, A, c)[0]
+        xf, _, _, _, lagr, _ = solve_qp(Q, p, A, c)
+        self._w = xf
+        self._alphas = lagr
 
     def predict(self, X):
         # X should be a matrix of shape (N, 3)
