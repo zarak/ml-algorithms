@@ -1,4 +1,7 @@
 from lfd.models.linear import LinearRegression
+from lfd.models.support_vector_machines import SVM
+from lfd.models.perceptron import Perceptron
+from lfd import synthetic
 import pandas as pd
 import numpy as np
 import week6
@@ -81,5 +84,29 @@ def question6():
     return np.mean([e1, e2, e], axis=1)
 
 
+def question8(N):
+    error_scores = []
+    support_vectors_count = []
+    for _ in range(1000):
+        d = synthetic.Data(N)
+        p = Perceptron()
+        p.fit(d.X_train, d.y_train)
+        p_preds = p.predict(d.X_test)
+        p_error = np.mean(p_preds != d.y_test)
+
+        svm = SVM()
+        svm.fit(d.X_train.T, d.y_train.T)
+        svm_preds = svm.predict(d.X_test.T)
+        svm_error = np.mean(svm_preds != d.y_test.T)
+
+        error_scores.append([p_error, svm_error])
+        support_vectors_count.append(svm.num_support_vectors)
+    return np.array(error_scores), np.mean(support_vectors_count)
+
+
 if __name__ == "__main__":
-    print(question6())
+    error_scores, sv_counts = (question8(10))
+    print("Fraction of the time SVMs have better accuracy than perceptron: ",
+            np.mean(error_scores[:, 1] < error_scores[:, 0]))
+    print("Mean number of support vectors: ", sv_counts)
+
