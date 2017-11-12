@@ -4,6 +4,10 @@ from quadprog import solve_qp
 
 
 class SVM:
+    def __init__(self):
+        self._w = None
+        self._alphas = None
+
     def _set_dimensions(self, X):
         # X should be a matrix of shape (N, 3)
         assert X.shape[1] == 3
@@ -34,8 +38,11 @@ class SVM:
         return self._w
 
     @property
-    def alphas(self):
-        return self._alphas
+    def num_support_vectors(self):
+        if self._alphas is not None:
+            return np.sum(self._alphas != 0)
+        else:
+            return None
 
     def fit(self, X, y):
         # Ensure that there is not just one label for all points
@@ -46,10 +53,10 @@ class SVM:
         A = self._A.T
         p = np.squeeze(self._p)
         c = np.squeeze(self._c)
-        print(Q.shape)
-        print(A.shape)
-        print(p.shape)
-        print(c.shape)
+        # print(Q.shape)
+        # print(A.shape)
+        # print(p.shape)
+        # print(c.shape)
         # Minimize     1/2 u^T Q u - p^T u
         # Subject to   A u >= c
         # result = solve_qp(Q, p, A, c)[0]
