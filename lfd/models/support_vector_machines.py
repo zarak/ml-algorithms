@@ -61,7 +61,7 @@ class SVM:
         # Subject to   A u >= c
         # result = solve_qp(Q, p, A, c)[0]
         xf, _, _, _, lagr, _ = solve_qp(Q, p, A, c)
-        self._w = xf
+        self._w = xf.reshape(-1, 1)
         self._alphas = lagr
 
     def predict(self, X):
