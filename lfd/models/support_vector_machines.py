@@ -59,7 +59,7 @@ class SVM:
         self._construct_matrices(X, y)
         Q, p, A, c = self._format_for_solver()
         # Minimize     1/2 u^T Q u - p^T u
-        # Subject to   A u >= c
+        # Subject to   A^T u >= c
         # result = solve_qp(Q, p, A, c)[0]
         xf, _, _, _, lagr, _ = solve_qp(Q, p, A, c)
         self._w = xf.reshape(-1, 1)
