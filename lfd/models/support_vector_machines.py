@@ -33,6 +33,15 @@ class SVM:
         Y = np.diag(np.squeeze(y))
         self._A = Y @ X
 
+    def _format_for_solver(self):
+        # Make Q positive definite
+        Q = self._Q + np.eye(3) * 1e-5
+        # Squeeze and transpose to put in appropriate format for solver
+        A = self._A.T
+        p = np.squeeze(self._p)
+        c = np.squeeze(self._c)
+        return Q, p, A, c
+
     @property
     def w(self):
         return self._w
@@ -48,15 +57,7 @@ class SVM:
         # Ensure that there is not just one label for all points
         self._set_dimensions(X)
         self._construct_matrices(X, y)
-        # Squeeze and transpose to put in appropriate format for solver
-        Q = self._Q + np.eye(3) * 1e-5 # Make Q positive definite
-        A = self._A.T
-        p = np.squeeze(self._p)
-        c = np.squeeze(self._c)
-        # print(Q.shape)
-        # print(A.shape)
-        # print(p.shape)
-        # print(c.shape)
+        Q, p, A, c = self._format_for_solver()
         # Minimize     1/2 u^T Q u - p^T u
         # Subject to   A u >= c
         # result = solve_qp(Q, p, A, c)[0]
