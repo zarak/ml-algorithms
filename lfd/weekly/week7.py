@@ -81,7 +81,8 @@ def question6():
     e1 = np.random.uniform(0, 1, 100000)
     e2 = np.random.uniform(0, 1, 100000)
     e = np.min([e1, e2], axis=0)
-    return np.mean([e1, e2, e], axis=1)
+    mean = np.mean([e1, e2, e], axis=1)
+    return mean
 
 
 def question8(N):
@@ -105,8 +106,13 @@ def question8(N):
 
 
 if __name__ == "__main__":
-    error_scores, sv_counts = (question8(10))
-    print("Fraction of the time SVMs have better accuracy than perceptron: ",
-            np.mean(error_scores[:, 1] < error_scores[:, 0]))
-    print("Mean number of support vectors: ", sv_counts)
+    # error_scores, sv_counts = (question8(10))
+    # print("Fraction of the time SVMs have better accuracy than perceptron: ",
+            # np.mean(error_scores[:, 1] < error_scores[:, 0]))
+    # print("Mean number of support vectors: ", sv_counts)
+    scores = []
+    for i in range(100):
+        scores.append(question6()[2])
+
+    print(np.std(scores))
 
