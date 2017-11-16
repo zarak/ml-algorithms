@@ -4,8 +4,8 @@ import numpy as np
 
 
 def load_data():
-    data_in = np.loadtxt('../data/week6/in.dta')
-    data_out = np.loadtxt('../data/week6/out.dta')
+    data_in = np.loadtxt('../data/in.dta')
+    data_out = np.loadtxt('../data/out.dta')
     return data_in, data_out
 
 
@@ -30,8 +30,8 @@ def error_rate(labels, preds):
 
 def question2(reg):
     lm = LinearRegression(reg)
-    data_in = np.fromfile('../data/week6/in.dta', sep=' ').reshape(-1, 3)
-    data_out = np.fromfile('../data/week6/out.dta', sep=' ').reshape(-1, 3)
+    data_in = np.fromfile('../data/in.dta', sep=' ').reshape(-1, 3)
+    data_out = np.fromfile('../data/out.dta', sep=' ').reshape(-1, 3)
     num_in = data_in.shape[0]
     num_out = data_out.shape[0]
     # Add bias to the first two columns only - the third column is the target
