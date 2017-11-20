@@ -1,6 +1,8 @@
 import numpy as np
+from sklearn.model_selection import KFold
 from sklearn.svm import SVC
 from pathlib import Path
+from collections import Counter
 
 
 DATA_PATH = Path('/home/z/Documents/ml-algorithms/lfd/data')
@@ -124,3 +126,30 @@ def question6():
                     np.sum(svm.n_support_))
 
 
+def CV10fold(X):
+    """Returns the indices for a training and validation set split
+    for 10-fold cross-validation"""
+    # X should have shape (num observations, num features)
+    assert X.shape[1] == 2
+    num_examples = X.shape[0]
+    fold_size = num_examples // 10
+    remainder = num_examples % 10
+    shuffled_indices = np.random.permutation(range(num_examples))
+    leftover_indices = list(shuffled_indices[-remainder:])
+    for fold in range(10):
+        val_idx = shuffled_indices[fold*fold_size:(fold+1)*fold_size]
+        # train_idx = np.setxord1d(shuffled_indices, val_idx)
+        train_idx = list(set(shuffled_indices) - set(val_idx))
+        if leftover_indices:
+            # print(leftover_indices)
+            train_idx.append(leftover_indices.pop())
+        train_idx = np.array(train_idx)
+        yield train_idx, val_idx
+
+
+def question7():
+    kernel, Q, _ = default_params()
+    X_train, X_test, y_train, y_test = one_versus_five()
+    C_values = [0.0001, 0.001, 0.01, 0.1, 1.0]
+    for i in range(100):
+        pass
