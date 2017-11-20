@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.model_selection import KFold
 from sklearn.svm import SVC
 from pathlib import Path
 from collections import Counter
