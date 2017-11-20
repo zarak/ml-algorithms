@@ -30,18 +30,22 @@ def generate_digit2labels(y):
 
 def default_params():
     """Returns the parameter settings for questions 2 through 4"""
-    kernel = 'poly'
-    Q = 2
-    C = 0.01
-    return kernel, Q, C
+    params = dict(
+        kernel='poly',
+        degree=2,
+        C=0.01,
+        coef0=1,
+        gamma=1
+    )
+    return params
     
 
 def question2():
-    kernel, Q, C = default_params()
+    params = default_params()
     X_train, X_test, y_train, y_test = load_data()
     digit2labels_train = generate_digit2labels(y_train)
     for digit in range(0, 10, 2):
-        svm = SVC(kernel=kernel, degree=Q, C=C)
+        svm = SVC(**params)
         y_train = digit2labels_train[digit]
         svm.fit(X_train, y_train)
         preds = svm.predict(X_train)
@@ -50,11 +54,11 @@ def question2():
 
 
 def question3():
-    kernel, Q, C = default_params()
+    params = default_params()
     X_train, X_test, y_train, y_test = load_data()
     digit2labels_train = generate_digit2labels(y_train)
     for digit in range(1, 10, 2):
-        svm = SVC(kernel=kernel, degree=Q, C=C)
+        svm = SVC(**params)
         y_train = digit2labels_train[digit]
         svm.fit(X_train, y_train)
         preds = svm.predict(X_train)
@@ -63,11 +67,11 @@ def question3():
 
 
 def question4():
-    kernel, Q, C = default_params()
+    params = default_params()
     X_train, X_test, y_train, y_test = load_data()
     digit2labels_train = generate_digit2labels(y_train)
 
-    svm_0 = SVC(kernel=kernel, degree=Q, C=C)
+    svm_0 = SVC(**params)
     y_train_0 = digit2labels_train[0]
     svm_0.fit(X_train, y_train_0)
 
@@ -148,8 +152,35 @@ def CV10fold(X):
 
 
 def question7():
-    kernel, Q, _ = default_params()
-    X_train, X_test, y_train, y_test = one_versus_five()
+    params = default_params()
+    kernel = params['kernel']
+    Q = params['degree']
+    coef0 = params['coef0']
+    gamma  = params['gamma']
+
+    X, X_test, y, y_test = one_versus_five()
     C_values = [0.0001, 0.001, 0.01, 0.1, 1.0]
-    for i in range(100):
-        pass
+    cnt = Counter()
+    for _ in range(100):
+        error_scores = {}
+        for C in C_values:
+            fold_scores = []
+            for i, (train_idx, val_idx) in enumerate(CV10fold(X)):
+                print(f"Processing fold {i}...")
+                svm = SVC(kernel=kernel, coef0=coef0, gamma=gamma, degree=Q,
+                        C=C)
+                X_train = X[train_idx]
+                y_train = y[train_idx]
+                X_val = X[val_idx]
+                y_val = y[val_idx]
+                svm.fit(X_train, y_train)
+                val_preds = svm.predict(X_val)
+                val_error = np.mean(val_preds != y_val)
+                fold_scores.append(val_error)
+            average_10fold_score = np.mean(fold_scores)
+            error_scores[C] = average_10fold_score
+        C_with_min_error = min(error_scores, key=error_scores.get)
+        cnt[C_with_min_error] += 1
+    print(cnt)
+
+
