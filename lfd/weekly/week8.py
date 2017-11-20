@@ -186,3 +186,22 @@ def question7_8():
     print(cnt)
     # For question 8
     print(f"The minimum error over 100 runs is {np.mean(min_errors)}")
+    
+
+def question9():
+    kernel = 'rbf'
+    C_values = [0.01, 1.0, 100, 10**4, 10**6]
+    X_train, X_test, y_train, y_test = one_versus_five()
+    for C in C_values:
+        svm = SVC(kernel=kernel, C=C)
+        svm.fit(X_train, y_train)
+        train_preds = svm.predict(X_train)
+        test_preds = svm.predict(X_test)
+        E_in = np.mean(preds != y_train)
+        E_out = np.mean(preds != y_test)
+        print(f"E_in for C={C} is", E_in)
+        print(f"E_out for C={C} is", E_out)
+
+
+if __name__ == "__main__":
+    question9()
