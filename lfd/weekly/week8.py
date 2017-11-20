@@ -99,15 +99,28 @@ def question5():
         test_preds = svm.predict(X_test)
         E_in = np.mean(y_train != train_preds)
         E_out = np.mean(y_test != test_preds)
-        print(f"Number of support vectors for {C}", np.sum(svm.n_support_))
-        print(f"E_in for {C}", E_in)
-        print(f"E_out for {C}", E_out)
+        print(f"Number of support vectors for C={C}", np.sum(svm.n_support_))
+        print(f"E_in for C={C}", E_in)
+        print(f"E_out for C={C}", E_out)
         
 
 def question6():
     kernel = 'poly'
     X_train, X_test, y_train, y_test = one_versus_five()
     
-    Q_values = range(2, 6)
+    Q_values = [2, 5]
     C_values = [0.0001, 0.001, 0.01, 1.0]
+    for C in C_values:
+        for Q in Q_values:
+            svm = SVC(kernel=kernel, coef0=1, gamma=1, degree=Q, C=C)
+            svm.fit(X_train, y_train)
+            train_preds = svm.predict(X_train)
+            test_preds = svm.predict(X_test)
+            E_in = np.mean(y_train != train_preds)
+            E_out = np.mean(y_test != test_preds)
+            print(f"E_in for Q={Q} and C={C}", E_in)
+            print(f"E_out for Q={Q} and C={C}", E_out)
+            print(f"Number of support vectors for Q={Q} and C={C}",
+                    np.sum(svm.n_support_))
+
 
