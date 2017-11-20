@@ -151,7 +151,7 @@ def CV10fold(X):
         yield train_idx, val_idx
 
 
-def question7():
+def question7_8():
     params = default_params()
     kernel = params['kernel']
     Q = params['degree']
@@ -160,13 +160,15 @@ def question7():
 
     X, X_test, y, y_test = one_versus_five()
     C_values = [0.0001, 0.001, 0.01, 0.1, 1.0]
+
     cnt = Counter()
+    min_errors = []
     for _ in range(100):
         error_scores = {}
         for C in C_values:
             fold_scores = []
             for i, (train_idx, val_idx) in enumerate(CV10fold(X)):
-                print(f"Processing fold {i}...")
+                # print(f"Processing fold {i}...")
                 svm = SVC(kernel=kernel, coef0=coef0, gamma=gamma, degree=Q,
                         C=C)
                 X_train = X[train_idx]
@@ -179,8 +181,9 @@ def question7():
                 fold_scores.append(val_error)
             average_10fold_score = np.mean(fold_scores)
             error_scores[C] = average_10fold_score
+        min_errors.append(min(error_scores.values()))
         C_with_min_error = min(error_scores, key=error_scores.get)
         cnt[C_with_min_error] += 1
     print(cnt)
-
-
+    # For question 8
+    print(f"The minimum error over 100 runs is {np.mean(min_errors)}")
