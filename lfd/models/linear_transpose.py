@@ -1,4 +1,3 @@
-import synthetic
 import numpy as np
 
 
