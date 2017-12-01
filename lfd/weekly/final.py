@@ -75,9 +75,43 @@ def question8():
         y_test = digit2labels_test[digit]
         lm.fit(Z_train.T, y_train.T)
         preds = lm.predict(Z_test.T)
-        E_in = np.mean(preds != y_test)
-        print(f"E_in for {digit} versus all is", E_in)
+        E_out = np.mean(preds != y_test)
+        print(f"E_in for {digit} versus all is", E_out)
+
+
+def question9():
+    X_train, X_test, y_train, y_test = load_data()
+    X_train = add_bias(X_train)
+    X_test = add_bias(X_test)
+    Z_train = non_linear_transformation(X_train)
+    Z_test = non_linear_transformation(X_test)
+    digit2labels_train = generate_digit2labels(y_train)
+    digit2labels_test = generate_digit2labels(y_test)
+
+    for digit in range(0, 10):
+        X_lm = LinearRegression(l2=1)
+        Z_lm = LinearRegression(l2=1)
+
+        y_train = digit2labels_train[digit]
+        y_test = digit2labels_test[digit]
+
+        X_lm.fit(X_train.T, y_train.T)
+        X_train_preds = X_lm.predict(X_train.T)
+        X_test_preds = X_lm.predict(X_test.T)
+
+        Z_lm.fit(Z_train.T, y_train.T)
+        Z_train_preds = Z_lm.predict(Z_train.T)
+        Z_test_preds = Z_lm.predict(Z_test.T)
+
+        X_E_in = np.mean(X_train_preds != y_train)
+        Z_E_in = np.mean(Z_train_preds != y_train)
+        X_E_out = np.mean(X_test_preds != y_test)
+        Z_E_out = np.mean(Z_test_preds != y_test)
+        print(f"E_in for {digit} versus all is", X_E_in)
+        print(f"E_out for {digit} versus all is", X_E_out)
+        print(f"E_in for {digit} versus all with feature transformation is", Z_E_in)
+        print(f"E_out for {digit} versus all with feature transformation is", Z_E_out)
 
 
 if __name__ == "__main__":
-    question8()
+    question9()
